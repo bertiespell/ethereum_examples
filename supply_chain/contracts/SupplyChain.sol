@@ -44,6 +44,11 @@ contract SupplyChain {
   /* Create 4 events with the same name as each possible State (see above)
     Each event should accept one argument, the sku*/
 
+    event ForSale(uint sku);
+    event Sold(uint sku);
+    event Shipped(uint sku);
+    event Received(uint sku);
+
 /* Create a modifer that checks if the msg.sender is the owner of the contract */
 
   modifier verifyCaller (address _address) { require (msg.sender == _address); _;}
