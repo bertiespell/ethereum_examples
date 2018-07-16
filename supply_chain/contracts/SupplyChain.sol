@@ -87,7 +87,6 @@ contract SupplyChain {
     _;
   }
 
-
   constructor() public {
     /* Here, set the owner as the person who instantiated the contract
        and set your skuCount to 0. */
@@ -110,7 +109,15 @@ contract SupplyChain {
   function buyItem(uint sku)
     public
     payable
-  {}
+    forSale(sku)
+    paidEnough(msg.value)
+    checkValue(sku)
+  {
+    items[sku].buyer = msg.sender;
+    items[sku].state = State.Sold;
+    items[sku].seller.transfer(items[sku].price);
+    emit Sold(sku);
+  }
 
   /* Add 2 modifiers to check if the item is sold already, and that the person calling this function
   is the seller. Change the state of the item to shipped. Remember to call the event associated with this function!*/
