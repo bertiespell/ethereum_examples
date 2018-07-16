@@ -51,6 +51,11 @@ contract SupplyChain {
 
 /* Create a modifer that checks if the msg.sender is the owner of the contract */
 
+  modifier onlyOwnder (address _address) {
+    require(_address == owner);
+    _;
+  }
+
   modifier verifyCaller (address _address) { require (msg.sender == _address); _;}
 
   modifier paidEnough(uint _price) { require(msg.value >= _price); _;}
@@ -65,16 +70,20 @@ contract SupplyChain {
   /* For each of the following modifiers, use what you learned about modifiers
    to give them functionality. For example, the forSale modifier should require
    that the item with the given sku has the state ForSale. */
-  modifier forSale () {
+  modifier forSale (uint sku) {
+    require(items[sku].state == State.ForSale);
     _;
   }
-  modifier sold () {
+  modifier sold (uint sku) {
+    require(items[sku].state == State.Sold);
     _;
   }
-  modifier shipped () {
+  modifier shipped (uint sku) {
+    require(items[sku].state == State.Shipped);
     _;
   }
-  modifier received () {
+  modifier received (uint sku) {
+    require(items[sku].state == State.Received);
     _;
   }
 
@@ -82,6 +91,8 @@ contract SupplyChain {
   constructor() public {
     /* Here, set the owner as the person who instantiated the contract
        and set your skuCount to 0. */
+       owner = msg.sender;
+       skuCount = 0;
   }
 
   function addItem(string _name, uint _price) public {
@@ -98,6 +109,7 @@ contract SupplyChain {
 
   function buyItem(uint sku)
     public
+    payable
   {}
 
   /* Add 2 modifiers to check if the item is sold already, and that the person calling this function
